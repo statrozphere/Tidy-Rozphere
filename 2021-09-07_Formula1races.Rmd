@@ -13,4 +13,17 @@ output: html_document
 library(tidytuesdayR)
 library(tidyverse)
 ```
+### Checking Available Dataset
+```{r}
+tt_available()
+```
+
+### Downloading TT dataset
+```{r}
+tt_data <- tt_load("2021-09-07")
+```
+### Used Individual data
+```{r}
+results <- tt_data$results
+```
 
