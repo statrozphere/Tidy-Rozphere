@@ -1,0 +1,16 @@
+---
+title: '2021-09-07 Formula 1 Races'
+author: "Statrozphere.org"
+date: "9/7/2021"
+output: html_document
+---
+
+# Tidy Tuesday 07-09-2021
+
+## Preparation {.tabset}
+### Library
+```{r}
+library(tidytuesdayR)
+library(tidyverse)
+```
+
