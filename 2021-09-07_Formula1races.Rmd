@@ -9,7 +9,7 @@ output: html_document
 
 ## Preparation {.tabset}
 ### Library
-```{r}
+```{r library, message=FALSE, warning=FALSE}
 library(tidytuesdayR)
 library(tidyverse)
 ```
@@ -19,11 +19,31 @@ tt_available()
 ```
 
 ### Downloading TT dataset
-```{r}
+```{r download_data, eval=FALSE}
 tt_data <- tt_load("2021-09-07")
 ```
-### Used Individual data
+### Individual data
 ```{r}
+circuit <- tt_data$circuits
+constructor_results <- tt_data$constructor_results
+constructor_standings <- tt_data$constructor_standings
+driver_standings <- tt_data$driver_standings
+driver <- tt_data$drivers
+lap_times <- tt_data$lap_times
+pit_stops <- tt_data$pit_stops
+qualifying <- tt_data$qualifying
+races <- tt_data$races
 results <- tt_data$results
+seasons <- tt_data$seasons
+status <- tt_data$status
+```
+
+### Join Table
+```{r}
+driver_race_circuit <- driver_standings %>%
+  left_join(driver, by = "driverId") %>%
+  left_join(races, by = "raceId") %>% 
+  left_join(circuit, by = "circuitId")
+
 ```
 
