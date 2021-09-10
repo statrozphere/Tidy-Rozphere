@@ -40,10 +40,67 @@ status <- tt_data$status
 
 ### Join Table
 ```{r}
-driver_race_circuit <- driver_standings %>%
-  left_join(driver, by = "driverId") %>%
-  left_join(races, by = "raceId") %>% 
-  left_join(circuit, by = "circuitId")
-
+#driver_race_circuit <- driver_standings %>%
+#  left_join(driver, by = "driverId") %>%
+#  left_join(races, by = "raceId") %>% 
+#  left_join(circuit, by = "circuitId")
 ```
+
+```{r}
+pitstops_bydrive <- pit_stops %>%
+  left_join(driver, by = "driverId") %>%
+  left_join(races, by = "raceId")
+```
+
+### Select Data
+```{r}
+time_driver <- pitstops_bydrive %>% 
+  select(driverRef, milliseconds, year, name) %>%
+  filter(name == "Malaysian Grand Prix") %>%
+  select(-name) %>%
+  group_by(driverRef, year) %>%
+  summarise(milliseconds = mean(milliseconds), .groups="keep") %>%
+  #ungroup(driverRef) %>%
+  #distinct(milliseconds, .keep_all = TRUE)
+  ungroup(year) %>%
+  filter(milliseconds < 53000) %>%
+  mutate(cumulative = cumsum(milliseconds)) %>%
+  filter(driverRef %in% c("hamilton", "alonso", "vettel", "schumaker", "bottas", "hulkenberg", "massa", "perez", "rosberg", "raikkonen"))
+
+pitstop_time <- time_driver %>%
+  ggplot(aes(x=year, y=milliseconds)) +
+  geom_line(aes(group = driverRef, color = driverRef)) +
+  theme_minimal()
+
+  
+pitstop_time
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
