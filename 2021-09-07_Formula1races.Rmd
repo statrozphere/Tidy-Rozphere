@@ -22,6 +22,7 @@ tt_available()
 ```{r download_data, eval=FALSE}
 tt_data <- tt_load("2021-09-07")
 ```
+
 ### Individual data
 ```{r}
 circuit <- tt_data$circuits
@@ -74,6 +75,26 @@ pitstop_time <- time_driver %>%
 
   
 pitstop_time
+```
+## Who's Fastest on each circuits?
+```{r}
+fastest <- races %>%
+  left_join(y=circuit, by="circuitId") %>%
+  left_join(y=lap_times, by=c("raceId.x" = "raceId")) %>%
+  group_by(circuitId) %>%
+  summarise(fastest = min(milliseconds, na.rm=TRUE)) %>%
+  filter(fastest != Inf)
+
+fast_circuit <- fastest %>%
+  left_join(circuit, by="circuitId") %>%
+  distinct(circuitId, .keep_all = TRUE) %>%
+  select(c("circuitId", "fastest", "name.x", "location"))
+
+lap_only <- lap_times %>%
+  select("milliseconds", "driverId")
+
+who <- fast_circuit %>%
+  inner_join(lap_only, by=c("fastest" = "milliseconds"))
 ```
 
 
